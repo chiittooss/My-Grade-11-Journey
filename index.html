@@ -2,166 +2,683 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Grade 11 Journey</title>
-
-<!-- OMORI-like font -->
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
 <style>
-    body {
-        margin: 0;
-        font-family: 'Courier Prime', monospace;
-        background-color: black;
-        color: white;
+    :root {
+        --bg: #050505;
+        --panel: rgba(14, 14, 14, 0.92);
+        --panel-soft: rgba(255, 255, 255, 0.05);
+        --line: rgba(255, 255, 255, 0.18);
+        --text: #f8f8f8;
+        --muted: #b7b7b7;
+        --accent: #ffffff;
+        --accent-soft: #d9d9d9;
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
     }
 
-    header {
-        text-align: center;
-        padding: 40px;
-        border-bottom: 1px solid white;
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Courier Prime', monospace;
+        background:
+            radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 24%),
+            radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05), transparent 16%),
+            linear-gradient(180deg, #020202 0%, #0a0a0a 45%, #030303 100%);
+        color: var(--text);
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 95%);
+        opacity: 0.2;
+    }
+
+    .floating-stars {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+    .star {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 12px;
+        animation: drift linear infinite;
+    }
+
+    @keyframes drift {
+        from {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+        15% {
+            opacity: 0.75;
+        }
+        85% {
+            opacity: 0.55;
+        }
+        to {
+            transform: translateY(-110vh) translateX(24px);
+            opacity: 0;
+        }
+    }
+
+    .page {
+        position: relative;
+        z-index: 1;
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 56px;
+    }
+
+    .hero {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.3fr 0.9fr;
+        gap: 22px;
+        align-items: stretch;
+        margin-top: 8px;
+    }
+
+    .hero-panel,
+    .music-panel,
+    .section-shell,
+    .timeline-shell,
+    .footer-card {
+        background: var(--panel);
+        border: 1.5px solid var(--line);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(8px);
+    }
+
+    .hero-panel {
+        padding: 34px;
+        min-height: 360px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-panel::after {
+        content: "";
+        position: absolute;
+        right: -20px;
+        bottom: -20px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 1px dashed rgba(255, 255, 255, 0.12);
+        opacity: 0.45;
+    }
+
+    .hero-kicker,
+    .section-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Gaegu', cursive;
+        font-size: 1.1rem;
+        letter-spacing: 0.06em;
+        color: var(--accent-soft);
+        margin-bottom: 12px;
+    }
+
+    h1, h2, h3 {
+        margin: 0;
     }
 
     h1 {
-        font-size: 40px;
-        letter-spacing: 3px;
+        font-size: clamp(2.3rem, 5vw, 4.4rem);
+        line-height: 0.95;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
     }
 
-    nav {
-        text-align: center;
-        padding: 10px;
-        border-bottom: 1px solid white;
+    .hero-sub {
+        max-width: 54ch;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.8;
+        margin-bottom: 20px;
     }
 
-    nav a {
-        color: white;
+    .hero-quote {
+        font-family: 'Gaegu', cursive;
+        font-size: 1.45rem;
+        padding: 14px 18px;
+        border-left: 3px solid white;
+        background: rgba(255, 255, 255, 0.04);
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    .hero-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .chip {
+        padding: 10px 14px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.9rem;
+        color: var(--accent-soft);
+    }
+
+    .music-panel {
+        padding: 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        justify-content: space-between;
+    }
+
+    .music-panel h2 {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+
+    .music-panel p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+    }
+
+    .music-box {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+    }
+
+    audio {
+        width: 100%;
+        margin-top: 12px;
+        filter: grayscale(1) contrast(1.2);
+    }
+
+    .nav-dock {
+        position: sticky;
+        top: 14px;
+        z-index: 4;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 22px 0 28px;
+        padding: 12px;
+        background: rgba(8, 8, 8, 0.88);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        backdrop-filter: blur(10px);
+    }
+
+    .nav-dock a,
+    .toggle-all {
+        color: var(--text);
         text-decoration: none;
-        margin: 0 15px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+        padding: 10px 14px;
+        border-radius: 999px;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        cursor: pointer;
+        font: inherit;
     }
 
-    nav a:hover {
-        text-decoration: underline;
+    .nav-dock a:hover,
+    .toggle-all:hover,
+    .summary:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(255, 255, 255, 0.4);
     }
 
-    section {
-        padding: 50px;
-        border-bottom: 1px solid white;
+    .section-shell,
+    .timeline-shell {
+        padding: 28px;
+        margin-bottom: 24px;
     }
 
-    h2 {
-        font-size: 28px;
-        margin-bottom: 20px;
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 18px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
     }
 
-    .artifact-box {
-        border: 1px solid white;
-        padding: 15px;
-        margin-bottom: 20px;
+    .section-header p,
+    .timeline-intro,
+    .footer-card p {
+        color: var(--muted);
+        line-height: 1.8;
+        margin: 0;
     }
 
-    footer {
-        text-align: center;
+    .artifact-grid,
+    .timeline-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+    }
+
+    details.card {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--panel-soft);
+        overflow: hidden;
+        transition: transform 0.24s ease, border-color 0.24s ease, background 0.24s ease;
+    }
+
+    details.card[open] {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.42);
+        transform: translateY(-3px);
+    }
+
+    .summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 18px 18px 16px;
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 14px;
+        transition: background 0.2s ease;
+    }
+
+    .summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .summary-left {
+        display: flex;
+        gap: 14px;
+        align-items: start;
+    }
+
+    .icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        display: grid;
+        place-items: center;
+        font-size: 1.2rem;
+        background: rgba(255, 255, 255, 0.06);
+        flex: 0 0 auto;
+    }
+
+    .summary-text h3 {
+        font-size: 1.05rem;
+        margin-bottom: 6px;
+    }
+
+    .summary-text p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: 0.93rem;
+    }
+
+    .caret {
+        font-size: 1.2rem;
+        transition: transform 0.2s ease;
+        color: var(--accent-soft);
+    }
+
+    details[open] .caret {
+        transform: rotate(45deg);
+    }
+
+    .card-content {
+        padding: 0 18px 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mini-tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 16px 0 10px;
+    }
+
+    .mini-tag {
+        font-size: 0.78rem;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px dashed rgba(255, 255, 255, 0.24);
+        color: var(--accent-soft);
+    }
+
+    .story-block {
+        margin-top: 12px;
+        padding: 14px 14px 2px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .story-block h4 {
+        margin: 0 0 10px;
+        font-size: 0.95rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+    }
+
+    .card-content p {
+        margin: 0 0 12px;
+        color: #efefef;
+        line-height: 1.85;
+        font-size: 0.95rem;
+    }
+
+    .timeline-card {
         padding: 20px;
-        font-size: 12px;
-        opacity: 0.6;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+        min-height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .timeline-card::before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        bottom: 20px;
+        width: 2px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+    }
+
+    .timeline-card h3,
+    .timeline-card p {
+        position: relative;
+        margin-left: 20px;
+    }
+
+    .timeline-card h3 {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .timeline-card p {
+        margin-top: 0;
+        color: var(--muted);
+        line-height: 1.8;
+    }
+
+    .footer-card {
+        margin-top: 14px;
+        padding: 28px;
+        text-align: center;
+    }
+
+    .footer-card h2 {
+        margin-bottom: 8px;
+        font-size: 1.55rem;
+    }
+
+    .hint {
+        margin-top: 10px;
+        font-family: 'Gaegu', cursive;
+        font-size: 1.2rem;
+        color: var(--accent-soft);
+    }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+        .hero {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-panel,
+        .music-panel,
+        .section-shell,
+        .timeline-shell,
+        .footer-card {
+            border-radius: 18px;
+        }
+
+        .page {
+            width: min(100% - 18px, 1200px);
+        }
+
+        .hero-panel,
+        .music-panel,
+        .section-shell,
+        .timeline-shell,
+        .footer-card {
+            padding: 22px;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .nav-dock {
+            border-radius: 24px;
+            justify-content: stretch;
+        }
+
+        .nav-dock a,
+        .toggle-all {
+            flex: 1 1 calc(50% - 10px);
+            text-align: center;
+        }
+
+        .summary {
+            padding: 16px;
+        }
+
+        .summary-left {
+            gap: 10px;
+        }
+
+        h1 {
+            font-size: 2.35rem;
+        }
     }
 </style>
 </head>
-
 <body>
-
-<header>
-    <h1>MY GRADE 11 JOURNEY</h1>
-    <p>"Everything was black and white... until it wasn't."</p>
-</header>
-
-<nav>
-    <a href="#artifacts">Artifacts</a>
-    <a href="#climb">The Climb</a>
-    <a href="#storms">The Storms</a>
-    <a href="#pivots">The Pivots</a>
-    <a href="#summit">The Summit</a>
-</nav>
-
-<!-- ================= ARTIFACTS ================= -->
-<section id="artifacts">
-    <h2>Artifacts</h2>
-
-    <div class="artifact-box">
-        <h3>Academic Artifact</h3>
-
-        <p>Throughout my academic journey, I have experienced both achievements and struggles.</p>
-        <p>Success: Maintaining my 90+ grade streak</p>
-
-         <p>Ever since I started school, I have consistently maintained my high marks. I have never dropped below the average of 90 and it’s something I’m genuinely proud of.
-           <p>It shows that even when lessons are getting progressively harder, expectations are increasing each year, I still manage to keep my academic performance up.</p>
-
-        <p>Struggle: Adjusting to the new subjects</p>
-
-        <p>Despite my consistent academic performance, my biggest struggle was adjusting to the new subjects..particularly the subjects 'ES' and 'CHEM'. 
-          <p>Those subjects gave me a really hard time. It was hard for me to remember the discussions in those subjects.</p>
-          <p>More info!</p>
-          <p>In ES, I struggled to stay interested, especially when we started talking about rocks. 
-            I thought it would be my new favorite subject, since I considered becoming an astronaut.
-            But even when we did come across topics outside Earth, I just couldn’t connect with the subject and because of that
-            it was harder for me to focus and actually remember what was being discussed.</p>
-           <p>Chemistry was even more challenging for me. Topics like atoms and the periodic table were confusing for me. I had a very hard time understanding and remembering them. 
-            One particular topic was about periodic elements where we had to compute its overall mass. The ones that gave me a headache were the lessons that needed to be solved and had their formulas on their own. It always made my head spin and it didn't help when we had about 2 quarters with it.
-            <p>These subjects weren't something I could easily pick up, and that made it frustrating.</p>
-
-          <p>Although, these experiences made me realize that not everything will come naturally to me, there will always be times where I have to work for it. I’m still working on improving by reviewing more and trying to understand the lessons better instead of just memorizing them blindly.</p>
+    <div class="floating-stars" aria-hidden="true">
+        <span class="star" style="left: 7%; bottom: -10%; animation-duration: 14s; animation-delay: 1s;">✦</span>
+        <span class="star" style="left: 18%; bottom: -20%; animation-duration: 16s; animation-delay: 5s;">✧</span>
+        <span class="star" style="left: 29%; bottom: -15%; animation-duration: 18s; animation-delay: 0s;">★</span>
+        <span class="star" style="left: 43%; bottom: -18%; animation-duration: 13s; animation-delay: 3s;">✦</span>
+        <span class="star" style="left: 56%; bottom: -12%; animation-duration: 17s; animation-delay: 7s;">✧</span>
+        <span class="star" style="left: 68%; bottom: -16%; animation-duration: 15s; animation-delay: 2s;">★</span>
+        <span class="star" style="left: 82%; bottom: -22%; animation-duration: 19s; animation-delay: 4s;">✦</span>
+        <span class="star" style="left: 91%; bottom: -14%; animation-duration: 12s; animation-delay: 6s;">✧</span>
     </div>
 
-    <div class="artifact-box">
-        <h3>Skill-Building Artifact</h3>
-        <p>[Coding, sports, artwork]</p>
-        <p>Over time, I’ve actually developed a lot of different skills both inside and outside of school, especially in coding, basketball, and art. 
-          <p>More info!</p>
+    <main class="page">
+        <section class="hero reveal">
+            <div class="hero-panel">
+                <div>
+                    <div class="hero-kicker">✦ dream log / school save file</div>
+                    <h1>My Grade 11 Journey</h1>
+                    <p class="hero-sub">
+                        Yay you finished the game!</p>
+                        <p></p>Overview and additional infos!</p>
+                        <p>The quiet progress that made this year meaningful.
+                    </p>
+                    <div class="hero-quote">"Everything was black and white... until it wasn't."</div>
+                </div>
 
-          <p>Coding</p>
+                <div class="hero-stats">
+                    <span class="chip">🎓 Grade 11</span>
+                    <span class="chip">🖥 Coding</span>
+                    <span class="chip">🏀 Basketball</span>
+                    <span class="chip">🎨 Art</span>
+                </div>
+            </div>
 
-          <p>I’ve actually been interested in coding for a long time. I used to watch videos of people creating games and websites, and it really inspired me to try making my own.
-             It looked fun and creative, and I liked the idea of building something from scratch.</p>
+            <aside class="music-panel reveal">
+                <div>
+                    <div class="section-kicker">♫ music</div>
+                    <h2>Background Music</h2>
+                    <p>Music you may recognize.</p>
+                </div>
+                <div class="music-box">
+                    <strong>Now playing:</strong> OMORI - DUET
+                       <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1018458058&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/trxsh_cipo" title="Trxsh_Cipo" target="_blank" style="color: #cccccc; text-decoration: none;">Trxsh_Cipo</a> · <a href="https://soundcloud.com/trxsh_cipo/omori-ost-172-duet" title="OMORI OST - 172 DUET" target="_blank" style="color: #cccccc; text-decoration: none;">OMORI OST - 172 DUET</a></div>
+                </div>
+            </aside>
+        </section>
 
-             <p>The problem was… I didn’t know how to start or WHERE to start. I only had basic knowledge of HTML from previous grades, and when I tried researching more, I realized there were so many different coding languages. It made me demotivated knowing..</p>
-             <p>I started getting more into coding when it was introduced again in school. This school year! That’s when I actually began trying to learn it more seriously.
-               I still have a love-hate relationship with it. It gets frustrating when things don’t work out since I had to carefully check every code I did to figure out the error.</p>
-               <p>This is actually my very first time in trying to code a game! From start to finish and I'm really committed to finishing it. 
-                It’s still a 'simple', but the process itself is a vert a big step for me! I had to figure things out on my own, I had to watch a lot of youtube tutorials and test different types of codes. It was hard when not all codes have worked for me.
-              There were times where I felt stuck and wanted to stop, but seeing small parts of the game actually work motivated me to keep going. Even simple things, like getting a feature to function properly, felt like a big achievement.</p>
-              <p>I still have a lot to learn, but this experience made coding feel more real to me. It’s not just something I watch anymore..I’m actually doing it with my own hands. Coding has taught me to be more patient and persistent and I’m starting to enjoy the process, not just the final result.</p>
+        <nav class="nav-dock reveal" aria-label="Section Navigation">
+            <a href="#artifacts">📦 Artifacts</a>
+            <a href="#journey">🗺 Journey Map</a>
+            <a href="#ending">🌙 Ending</a>
+            <button class="toggle-all" type="button" id="toggleAll">✨ Open all entries</button>
+        </nav>
 
+        <section class="section-shell reveal" id="artifacts">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">📦 collected memories</div>
+                    <h2>Artifacts</h2>
+                </div>
+                <p>Each card opens like a memory file.</p>
+            </div>
 
-          <p>Basketball</p>
-          <p>I've always wanted to have my 'own' sport from the start. 
-            Ever since COVID-19 started, I've been living with a sedentary lifestyle and I really wanted to change that</p>
-          <p>Last year, I asked my dad to enroll us in summer classes that involved running, since I wanted a sport that involved a lot of leg action. 
-          As he is a basketball player, obviously he wanted us to try his sport. One day later, he immediately enrolled us in basketball classes.</p>
+            <div class="artifact-grid">
+                <details class="card">
+                    <summary class="summary">
+                        <div class="summary-left">
+                            <div class="icon">📘</div>
+                            <div class="summary-text">
+                                <h3>Academic Artifact</h3>
+                                <p>Trying to adjust for the subjects I find difficult.</p>
+                            </div>
+                        </div>
+                        <span class="caret">+</span>
+                    </summary>
+                    <div class="card-content">
+                        <div class="mini-tag-row">
+                            <span class="mini-tag">success</span>
+                            <span class="mini-tag">chemistry</span>
+                            <span class="mini-tag">earth science</span>
+                        </div>
+                        <div class="story-block">
+                            <h4>Achievement</h4>
+                            <p>Throughout my academic journey, I experienced both achievements and struggles. Ever since I started school, I have consistently kept high marks and I have never dropped below an average of 90 and it's something I'm genuinely proud of!</p>
+                            <p>It shows that even when lessons are getting progressively harder, expectations are increasing each year, I still manage to keep my academic performance up.</p>
+                        </div>
+                        <div class="story-block">
+                            <h4>Struggle</h4>
+                            <p>My biggest academic struggle was adjusting to the new subjects, especially Earth Science and Chemistry. In Earth Science, I struggled to stay interested, especially when we started talking about rocks. I thought it would become one of my favorite subjects because I once considered becoming an astronaut. But even when we did come across topics outside Earth, I just couldn’t connect with the subject.</p>
+                            <p>Chemistry was even more difficult for me. Topics like atoms, the periodic table, and computing masses were confusing and overwhelming. I had a very hard time understanding and remembering them.  The lessons that especially gave me a headache were the ones that had to be caulcated with their own formulas. It didn't help when we had about 2 quarters with it..These subjects weren't something I could easily pick up, and that made it frustrating.</p>
+                            <p>Although, these experiences helped me realize that not everything will come naturally to me. Sometimes I will have to work for it. I am still trying to improve these subjects by reviewing and focusing more on understanding instead of memorizing blindly.</p>
+                        </div>
+                    </div>
+                </details>
 
-           <p>At first, I felt uneasy and uncomfortable. This was a male-dominated sport. I've always felt like the guys there were judging me, since I was a girl. I've heard them talk badly about the other girls in the class. 
-            <p>Girls were considered 'weak' in the sport.</p>
-            <p>I was also insecure when male friends wanted to play basketball with me and invite me to basketball plays. I didn't feel like my skills were 'good enough' to join.
-            But the more I played the sport, the more I fell in love with it. From the feeling of insecurity to the feeling of striving to become better.
-            I've met so many nice people in basketball. With them, I was more motivated in improving my current skills
-          I always asked for feedback on what I'm doing incorrectly to prevent it from becoming a habit and adjust the way I play. I became more aware of these mistakes and started correcting them. 
-            <p>It’s still a work in progress, I am still learning, but I can see that I’m improving.</p>
-
-        <p>Art</p>
-        <p>Art has always been my passion. Ever since I was little, I loved to draw people. It is something I’ve genuinely loved ever since I started. 
-            <p>It’s one of the ways I express myself. I’ve done different artworks throughout my years, and looking back at them, I can clearly see how much I’ve improved.
-
-Over time, I started becoming more aware on what I should improve (proportions, shading, etc). Even small improvements in my work made a big difference in the overall look of my artwork.
-
-<p>What I love about art is that it shows progress in a very visual way. Unlike other subjects, I can clearly see the difference between my earlier work and my recent ones, which motivates me more to keep improving.
+                <details class="card">
+                    <summary class="summary">
+                        <div class="summary-left">
+                            <div class="icon">🛠</div>
+                            <div class="summary-text">
+                                <h3>Skill-Building Artifact</h3>
+                                <p>Coding, basketball, and art</p>
+                            </div>
+                        </div>
+                        <span class="caret">+</span>
+                    </summary>
+                    <div class="card-content">
+                        <div class="mini-tag-row">
+                            <span class="mini-tag">coding</span>
+                            <span class="mini-tag">basketball</span>
+                            <span class="mini-tag">art</span>
+                        </div>
+                        <div class="story-block">
+                            <h4>💻 Coding</h4>
+                            <p>I have been interested in coding for a long time because I used to watch people create games and websites. It inspired me to try making my own. The hard part was that I had no idea where to begin. I only had basic HTML knowledge and seeing so many different types of programming languages made me feel demotivated.</p>
+                            <p>This school year, coding came back into my life in a more serious way. I still have a love-hate relationship with it because it can be VERY frustrating at times but I also feel proud whenever I solve errors. This is my first time really trying to code a game from start to finish and even if it is still simple, it already feels like a huge step for me. (I wanted to push myself and go out of my comfort zone since this will be my last project for G11)</p>
+                            <p>I had to watch TONS of tutorials, test many code ideas and I still kept going even when not every video, every code worked. Small working features gave me motivation. Coding taught me patience, persistence and how to enjoy the process instead of only chasing for the finished result.</p>
+                        </div>
+                        <div class="story-block">
+                            <h4>🏀 Basketball</h4>
+                            <p>I always wanted a sport of my own. After living a sedentary lifestyle because of COVID-19, I wanted to become more active. I asked my dad to enroll us in classes that involved running and because he is a basketball player, he immediately signed us up for basketball.</p>
+                            <p>At first, I felt uncomfortable because it was a male-dominated sport. I was insecure and worried about being judged as a girl. I also felt nervous when male friends invited me to join games because I didn't think I was good enough.</p>
+                            <p>But the more I played, the more I fell in love with it. I met kind people, and always asked for feedback. I corrected mistakes before they become habits. I am still learning but I can clearly see that I'm improving.</p>
+                        </div>
+                        <div class="story-block">
+                            <h4>🎨 Art</h4>
+                            <p>Art has always been my passion. Ever since I was little, I loved drawing people. It is one of the main ways I express myself. Over the years I have made many artworks that show how much I have improved.</p>
+                            <p>Over time, I started becoming more aware on what I should improve (proportions, shading, etc). Even small improvements in my work made a big difference in the overall look of my artwork.</p>
+                            <p><p>What I love about art is that it shows progress in a very visual way. Unlike other subjects, I can clearly see the difference between my earlier work and my recent ones, which motivates me more to keep improving.
 
 Even though I still think I have a lot to learn, I’ve become more patient with the process. I now spend more time refining my work instead of rushing to finish it, which has helped me improve both my skill and attention to detail.</p>
 
-<p>Overall, art is something I’ve always enjoyed. It has helped me develop creativity, patience, and the ability to see improvement through consistent effort.</p>
-    </div>
+                        </div>
+                    </div>
+                </details>
 
-
-    <div class="artifact-box">
-        <h3>Challenge Artifact</h3>
-        <p>One of my biggest challenges in school has been managing deadlines, assessments, workload, and the pressure of handling multiple activities at the same time. 
+                <details class="card">
+                    <summary class="summary">
+                        <div class="summary-left">
+                            <div class="icon">⛈</div>
+                            <div class="summary-text">
+                                <h3>Challenge Artifact</h3>
+                                <p>Workload, pressure, deadlines, and the weight of trying to keep up.</p>
+                            </div>
+                        </div>
+                        <span class="caret">+</span>
+                    </summary>
+                    <div class="card-content">
+                        <div class="mini-tag-row">
+                            <span class="mini-tag">pressure</span>
+                            <span class="mini-tag">deadlines</span>
+                            <span class="mini-tag">time management</span>
+                        </div>
+                        <div class="story-block">
+                            <h4>What Was Hard</h4>
+                            <p>One of my biggest challenges in school was managing deadlines, assessments, workload, and the pressure of handling many activities at the same time. Chemistry, again, was one of the most difficult subjects for me. Topics like molarity and the periodic table were confusing and stressful.</p>
+                            <p><p>One of my biggest challenges in school has been managing deadlines, assessments, workload, and the pressure of handling multiple activities at the same time. 
             <p>Again, chemistry has been one of the hardest subjects for me. Topics like molarity, the periodic table, and other concepts were confusing and difficult for me to fully understand. I often found myself struggling to keep up during discussions, which made it more stressful when assessments were near.</p>
             <p>There were also a LOT of moments where different projects and activities would pile up all at once and it was very overwhelming and mentally draining for me.
 
@@ -170,15 +687,29 @@ It was difficult trying to balance everything, especially when multiple subjects
 <p>Aside from the workload, I also struggled with the pressure of maintaining my academic performance. When I saw my grade on the first quarter, I was a bit worried. It felt like I hadn't tried my best even if I did. 
     I’ve always tried to keep my high grades so there’s a constant expectation for me to do well even when I’m already feeling tired or overwhelmed.</p>
     <p>But I am learning how to deal with them better. I’m trying to improve my time management and study habits so I can handle pressure more effectively instead of avoiding it or getting stressed. These experiences are helping me understand that challenges are part of the learning process.</p>
-    </div>
+                    </div>
+                </details>
 
-    <div class="artifact-box">
-        <h3>Wellness Artifact</h3>
-        <p>1. Physical Activity</p>
-        <p>2. Self-confidence growth</p>
-        <p>3. Finishing tasks / discipline</p>
-
-        <p>Over time, I’ve become more aware of my physical and mental well-being. 
+                <details class="card">
+                    <summary class="summary">
+                        <div class="summary-left">
+                            <div class="icon">🌿</div>
+                            <div class="summary-text">
+                                <h3>Wellness Artifact</h3>
+                                <p>Physical activity, self confidence building, and discipline.</p>
+                            </div>
+                        </div>
+                        <span class="caret">+</span>
+                    </summary>
+                    <div class="card-content">
+                        <div class="mini-tag-row">
+                            <span class="mini-tag">exercise</span>
+                            <span class="mini-tag">confidence</span>
+                            <span class="mini-tag">discipline</span>
+                        </div>
+                        <div class="story-block">
+                            <h4>Small Progress That Mattered</h4>
+                               <p>Over time, I’ve become more aware of my physical and mental well-being. 
           One of the main things that helped me improve was becoming more active in physical activities, especially sports like basketball. 
           Through this, I’ve learned to move better, stay active, and be more aware of my body. It also helped me build discipline through consistent practice, even when I didn’t feel like it.</p>
 
@@ -189,57 +720,142 @@ It was difficult trying to balance everything, especially when multiple subjects
 
           <p>Overall, I think my wellness has improved not in one big change, but through small progress in different areas like physical activity, confidence, and discipline. I’m still improving, but I can see that I’m becoming more consistent and in control of myself.</p>
     </div>
+                        </div>
+                    </div>
+                </details>
 
-    <div class="artifact-box">
-        <h3>Future-Ready Artifact</h3>
-        <p>[Researching of courses, career paths, etc.]</p>
-        <p>I’ve already started researching about my future, especially the courses I might take in college.</p>
-        <p>Right now, I’m mainly deciding between mechatronics and going into the medical field</p>
-        <p> Both interest me in different ways, which makes the it harder for me to choose between them.</p>
-        <p>The biggest challenge for me right now is choosing the right path.
-           I don’t want to end up in a course or career that I won’t enjoy or continue in the long run. 
-           I’m also thinking about the time, effort, and financial support my parents will give. I want to make sure that my decision is worth it.</p>
+                <details class="card">
+                    <summary class="summary">
+                        <div class="summary-left">
+                            <div class="icon">🔭</div>
+                            <div class="summary-text">
+                                <h3>Future-Ready Artifact</h3>
+                                <p>Researching possible college paths, careers, etc.</p>
+                            </div>
+                        </div>
+                        <span class="caret">+</span>
+                    </summary>
+                    <div class="card-content">
+                        <div class="mini-tag-row">
+                            <span class="mini-tag">college plans</span>
+                            <span class="mini-tag">engineering</span>
+                            <span class="mini-tag">medical field</span>
+                        </div>
+                        <div class="story-block">
+                            <h4>Looking Ahead</h4>
+                            <p>I already started researching my future, especially the courses I might take in college. Right now, I'm mainly deciding between mechatronics or going into the medical field. Both interest me in different ways, which makes choosing even harder.</p>
+ <p>I’m also thinking about the time, effort, and financial support my parents will give. I want to make sure that my decision is worth it.</p>
 
            <p>I’ve been trying to learn more about each option. On what kind of skills they require, what the workload is like, and the possible careers they lead to. Right now, I'm more leaning into the engineering field since I am worried about my parents' financial support since it lasts for about 10-16 years if I want to be a doctor/surgeon.
            I’m starting to realize that choosing a path for college isn’t just about what sounds interesting, which has 'higher salary' but also about what I’m willing to commit.</p>
 
            <p>Even though I’m still undecided, and still researching about these fields, this process is helping me become more aware of my goals and priorities. 
             Instead of rushing into a decision, I want to take my time, explore my options, and choose something that I can see myself growing in.</p>
-    </div>
-</section>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
 
-<!-- ================= REFLECTION ================= -->
-<section id="climb">
-    <h2>The Climb</h2>
-    <p>
-    At the start of Grade 11, I felt unsure if I could handle the increased workload and expectations. I struggled with inconsistent study habits and often relied on last-minute effort instead of planning ahead. My goal was to become more organized, improve my performance, and feel more confident in my abilities
-    </p>
-</section>
+        <section class="timeline-shell reveal" id="journey">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">🗺 story route</div>
+                    <h2>Journey Map</h2>
+                </div>
+                <p class="timeline-intro">Main Plot.</p>
+            </div>
 
-<section id="storms">
-    <h2>The Storms</h2>
-    <p>
-   One of the hardest moments I faced was when I felt overwhelmed by multiple deadlines and didn’t know where to start. I felt stressed, unmotivated, and frustrated with myself for falling behind. Instead of continuing that cycle, I realized I needed to change how I approached my work and take small steps to regain control.
-    </p>
-</section>
+            <div class="timeline-grid">
+                <article class="timeline-card">
+                    <h3>🪜 The Climb</h3>
+                    <p>The start of Grade 11 honestly felt like starting over.</p>
 
-<section id="pivots">
-    <h2>The Pivots</h2>
-    <p>
-   I began managing my time more effectively by using a planner and breaking tasks into smaller, more manageable steps. I also started asking for help when I didn’t understand something, which helped me learn more efficiently and reduced my stress.
-    </p>
-</section>
+<p>A lot of the people I was already familiar with had moved to different schools, so everything suddenly felt unfamiliar. New people, new environment and a completely different atmosphere. It felt weird having to adjust to all of it at once.. especially on the first day.
 
-<section id="summit">
-    <h2>The Summit</h2>
-    <p>
-   Now, I am more consistent with my work and no longer depend on last-minute studying. I feel more confident in asking questions and taking initiative in my learning. I have also developed better time management skills, allowing me to stay organized and balanced.
-    </p>
-</section>
+At the same time, I was also entering STEM, which made things feel even more unfamiliar. It wasn’t just a new environment socially, but academically too. Everything felt new all at once, and I had to get used to it.</p>
+                </article>
 
-<footer>
-    <p>End of Journey — Or Just the Beginning?</p>
-</footer>
+                <article class="timeline-card">
+                    <h3>🌧 The Storms</h3>
+                    <p>As time went on, things started getting more overwhelming.
 
+It wasn’t just about adjusting to new people or new subjects anymore. It was the pressure of trying to keep up with everything at once. Deadlines started piling up. More workload kept adding. It was hard to manage everything without feeling stressed.
+
+There were a lot of times where multiple activities from different subjects had almost the same deadline and trying to keep up with all of them felt mentally exhausting. It got overwhelming fast, especially when I was already struggling to adjust to subjects like Chemistry and ES while also trying to maintain my usual academic performance.
+
+A lot of the pressure came from trying to balance EVERYTHING at the same time.</p>
+                </article>
+
+                <article class="timeline-card">
+                    <h3>🔁 The Pivots</h3>
+                    <p>Over time, I started realizing that adjusting didn’t mean instantly being good at everything. It was more about learning how to deal with things little by little.
+
+Instead of expecting myself to understand everything right away, I started trying to be more patient with myself and with the process. I became more aware that not everything will make sense immediately and that improving takes time.
+
+I also started finding progress outside of academics too! Especially in coding, art, sports and even in how I manage myself. Those were the things that reminded me that progress doesn’t always have to be big to matter. Sometimes it’s just being a little more disciplined, a little more patient, or a little less afraid of making mistakes.</p>
+                </article>
+
+                <article class="timeline-card">
+                    <h3>🏁 The Summit</h3>
+                    <p>I’m still figuring a lot of things out but I think I understand myself more now than I did before.
+
+Grade 11 pushed me into a lot of things, it forced me to adjust, be more disciplined and figure things out as I go. I’m still not completely sure where I’ll end up but I know I’ve changed a lot from where I started.
+                </article>
+            </div>
+        </section>
+
+        <section class="footer-card reveal" id="ending">
+            <div class="section-kicker">🌙 save screen</div>
+            <h2>End of Journey... Or Just the Beginning?</h2>
+            <p>
+                This year was not only about grades. It was also about growing through confusion, frsutration, stress and most importantly..finding confidence in new places,
+            </p>
+            <div class="hint">Thank you for giving me a memorable school year.</div>
+        </section>
+
+<section class="footer-card reveal" id="ending">
+            <div class="section-kicker">⋆｡°✩</div>
+            <h2>Lastly..Letter to my past self.</h2>
+            <p>Dear Me,
+
+Don’t be afraid of change.
+Change doesn’t mean failure.
+
+Growth will often look like uncertainty before it looks like progress. There will be moments where you feel like you’re losing but that doesn’t mean you’ve already lost.
+Remember that the climb is supposed to be challenging. The summit is meant to be earned, not rushed. And the pivot. It’s about the result of not giving up.
+Keep going. Even if it looks different than what you expected.</p>
+
+            </p>
+            <div class="hint">You are allowed to change your mind.
+You are allowed to start again.</div>
+        </section>
+
+    </main>
+
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach((item) => observer.observe(item));
+
+        const toggleAllButton = document.getElementById('toggleAll');
+        const detailCards = [...document.querySelectorAll('details.card')];
+        let allOpen = false;
+
+        toggleAllButton.addEventListener('click', () => {
+            allOpen = !allOpen;
+            detailCards.forEach((card) => {
+                card.open = allOpen;
+            });
+            toggleAllButton.textContent = allOpen ? '✨ Close all entries' : '✨ Open all entries';
+        });
+    </script>
 </body>
 </html>
